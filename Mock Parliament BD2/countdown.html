@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    background: transparent;
+    font-family: 'Noto Sans', sans-serif;
+    color: white;
+  }
+
+  #display {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 72px;
+    font-weight: 600;
+  }
+
+  #controls {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0,0,0,0.85);
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+
+  input {
+    width: 60px;
+    font-size: 16px;
+  }
+
+  button {
+    font-size: 14px;
+    margin: 4px 2px;
+  }
+</style>
+</head>
+
+<body>
+
+<div id="display">00:00:00</div>
+
+<div id="controls">
+  <input id="h" type="number" min="0" value="0"> :
+  <input id="m" type="number" min="0" value="2"> :
+  <input id="s" type="number" min="0" value="0">
+  <br>
+  <button onclick="start()">Start</button>
+  <button onclick="pause()">Pause</button>
+  <button onclick="reset()">Reset</button>
+</div>
+
+<script>
+  const display = document.getElementById("display");
+
+  let remaining = 0;
+  let running = false;
+  let lastTick = Date.now();
+
+  function format(t) {
+    const h = String(Math.floor(t / 3600)).padStart(2, '0');
+    const m = String(Math.floor((t % 3600) / 60)).padStart(2, '0');
+    const s = String(t % 60).padStart(2, '0');
+    return `${h}:${m}:${s}`;
+  }
+
+  function start() {
+    const h = +document.getElementById("h").value || 0;
+    const m = +document.getElementById("m").value || 0;
+    const s = +document.getElementById("s").value || 0;
+
+    remaining = h * 3600 + m * 60 + s;
+    if (remaining <= 0) return;
+
+    display.textContent = format(remaining);
+    running = true;
+    lastTick = Date.now();
+  }
+
+  function pause() {
+    running = !running;
+    lastTick = Date.now();
+  }
+
+  function reset() {
+    running = false;
+    remaining = 0;
+    display.textContent = "00:00:00";
+  }
+
+  setInterval(() => {
+    if (!running || remaining <= 0) return;
+
+    const now = Date.now();
+    const delta = Math.floor((now - lastTick) / 1000);
+
+    if (delta > 0) {
+      remaining -= delta;
+      lastTick = now;
+      if (remaining < 0) remaining = 0;
+      display.textContent = format(remaining);
+    }
+  }, 200);
+</script>
+
+</body>
+</html>

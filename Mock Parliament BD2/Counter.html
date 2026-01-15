@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    background: transparent;
+    font-family: 'Noto Sans', sans-serif;
+    color: white;
+  }
+
+  /* ===== DISPLAY (CROP THIS AREA) ===== */
+  #display {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .row {
+    font-size: 36px;
+    font-weight: 600;
+    text-align: center;
+    margin: 6px 0;
+  }
+
+  /* ===== CONTROLS (CROP THIS OUT) ===== */
+  #controls {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    background: rgba(0,0,0,0.85);
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .ctrl-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  button {
+    font-size: 14px;
+    margin-right: 6px;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- DISPLAY -->
+<div id="display">
+  <div class="row" id="v0">0</div>
+  <div class="row" id="v1">0</div>
+  <div class="row" id="v2">0</div>
+</div>
+
+<!-- CONTROLS (CROP OUT IN OBS) -->
+<div id="controls">
+
+  <div class="ctrl-row">
+    <button onclick="down(0)">−</button>
+    <button onclick="up(0)">+</button>
+    Counter 1
+  </div>
+
+  <div class="ctrl-row">
+    <button onclick="down(1)">−</button>
+    <button onclick="up(1)">+</button>
+    Counter 2
+  </div>
+
+  <div class="ctrl-row">
+    <button onclick="down(2)">−</button>
+    <button onclick="up(2)">+</button>
+    Counter 3
+  </div>
+
+  <hr>
+  <button onclick="resetAll()">Global Reset</button>
+
+</div>
+
+<script>
+  const values = [0, 0, 0];
+
+  function update(i) {
+    document.getElementById("v" + i).textContent = values[i];
+  }
+
+  function up(i) {
+    values[i]++;
+    update(i);
+  }
+
+  function down(i) {
+    values[i]--;
+    update(i);
+  }
+
+  function resetAll() {
+    for (let i = 0; i < values.length; i++) {
+      values[i] = 0;
+      update(i);
+    }
+  }
+</script>
+
+</body>
+</html>
